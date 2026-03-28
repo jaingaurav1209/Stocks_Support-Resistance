@@ -22,6 +22,8 @@ def get_country_suffix(country):
     return ""
 
 def get_close_series(df):
+    if 'Close' not in df.columns:
+        return None
     close_series = df['Close']
     if isinstance(close_series, pd.DataFrame):
         close_series = close_series.iloc[:, 0]
@@ -56,7 +58,7 @@ def moving_average_crossover_strategy(symbol, years, short_window, long_window, 
     return df
 
 def rsi_ma_stoploss_strategy(symbol, years, invest, short_ma, long_ma,
-                             rsi_lower, rsi_upper, stoploss_pct, country):
+                               rsi_lower, rsi_upper, stoploss_pct, country):
     suffix = get_country_suffix(country)
     if not symbol.endswith((".NS", ".AX")):
         symbol += suffix
@@ -90,7 +92,7 @@ def rsi_ma_stoploss_strategy(symbol, years, invest, short_ma, long_ma,
     return df, trade_log
 
 def rsi_ma_stoploss_backtest(symbol, years, invest, short_ma, long_ma,
-                             rsi_lower, rsi_upper, stoploss_pct, country):
+                               rsi_lower, rsi_upper, stoploss_pct, country):
     suffix = get_country_suffix(country)
     if not symbol.endswith((".NS", ".AX")):
         symbol += suffix
@@ -141,7 +143,7 @@ if choice == "Buy & Hold":
     with col2:
         country = st.selectbox("Country", ["India", "Australia", "US"])
     with col3:
-        years = st.number_input("Years", 1, 20, 3)  # ✅ Fixed indentation
+        years = st.number_input("Years", 1, 20, 3)
     if st.button("Run Strategy"):
         df = buy_and_hold_strategy(symbol, years, country)
         if df is not None:
